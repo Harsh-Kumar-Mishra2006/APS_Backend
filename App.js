@@ -56,8 +56,14 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// Handle preflight requests
-app.options('*', cors(corsOptions));
+// Handle preflight requests for all routes
+app.options('/*', (req, res) => {
+  res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Cookie, X-Requested-With');
+  res.sendStatus(200);
+});
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
