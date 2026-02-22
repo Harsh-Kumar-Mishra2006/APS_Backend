@@ -69,6 +69,20 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+
+// Add this right after app.use(cookieParser());
+app.get('/api/env-check', (req, res) => {
+  res.json({
+    port: process.env.PORT,
+    nodeEnv: process.env.NODE_ENV,
+    jwtSecret: process.env.JWT_SECRET ? 'Set' : 'Not set',
+    mongodbUri: process.env.MONGODB_URI ? 'Set' : 'Not set',
+    // Show first few chars of MongoDB URI (not full for security)
+    mongodbPreview: process.env.MONGODB_URI 
+      ? process.env.MONGODB_URI.substring(0, 20) + '...' 
+      : 'Not available'
+  });
+});
 // Debug routes for auth testing
 app.get('/api/debug/auth-check', async (req, res) => {
   try {
